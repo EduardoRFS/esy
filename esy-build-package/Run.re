@@ -41,12 +41,10 @@ let withCwd = (path, ~f) =>
   Result.join(Bos.OS.Dir.with_current(path, f, ()));
 
 let exists = Bos.OS.Path.exists;
-
-let mkdir = path =>
-  switch (Bos.OS.Dir.create(path)) {
-  | Ok(_) => Ok()
-  | Error(msg) => Error(msg)
-  };
+let mkdir = path => {
+  let cmd = Bos.Cmd.of_list(["mkdir", "-p", EsyLib.Path.show(path)]);
+  Bos.OS.Cmd.run(cmd);
+};
 
 let ls = path => Bos.OS.Dir.contents(~dotfiles=true, ~rel=true, path);
 
